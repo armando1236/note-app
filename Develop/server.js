@@ -22,7 +22,7 @@ app.get('/', (req, res) =>
 );
 
 // GET Route for feedback page
-app.get('/notes', (req, res) =>
+app.get('/api/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
@@ -31,9 +31,17 @@ app.listen(PORT, () =>
 );
 
 // POST Route for a new UX/UI tip
-notes.post('/', (req, res) => {
-  console.log(req.body);
-
+app.post("/notes", (req, res) => {
+  const note = req.body;
+readFileAsync("./develop/db/db.json", "utf8").then(function(data){
+  const notes = [].concat(JSON.parse(data));
+  note.id = notes.length +1
+  notes.push(note);
+  return notes
+}).then(function(notes){
+  fs.writeFileSync("./develop/db/db.json",JSON.stringify(notes))
+  res.json(note);
+})
   const { title, text } = req.body;
 
   if (req.body) {
@@ -42,8 +50,8 @@ notes.post('/', (req, res) => {
       text,
     };
 
-    readAndAppend(newTip, './db/tips.json');
-    res.json(`Tip added successfully 🚀`);
+    readAndAppend(newTip, './db/db.json');
+    res.json(`Note added! 🚀`);
   } else {
     res.error('Error in adding tip');
   }
