@@ -31,9 +31,11 @@ app.use(express.static('public'));
 app.use(express.json());
 
 app.get("api/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, '/db/db.json'))
+//   res.sendFile(path.join(__dirname, '/db/db.json'))
+// });
+let data = fs.readFileSync("/db/db.json", "utf8");
+res.json(JSON.parsel(data));
 });
-
 // POST Route 
 app.post("api/notes", (req, res) => {
   const newNotes = req.body;
@@ -63,14 +65,14 @@ app.post("api/notes", (req, res) => {
           // });
           
           // GET Route for homepage
-          app.get('/', (req, res) =>
-          res.sendFile(path.join(__dirname, '/public/index.html'))
-          );
+          app.get('/', function (req, res) {
+          res.sendFile(path.join(__dirname, + '/public/index.html'));
+          });
           
           // GET Route for feedback page
-          app.get('/notes', (req, res) =>
-          res.sendFile(path.join(__dirname, '/public/notes.html'))
-          );
+          app.get('/notes', function (req, res) {
+          res.sendFile(path.join(__dirname + '/public/notes.html'));
+          });
       
           app.listen(PORT, () =>
           console.log(`App listening at http://localhost:${PORT} 🚀`)
