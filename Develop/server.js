@@ -71,65 +71,6 @@ app.post('/api/notes', (req, res) => {
 });
 
 
-// app.get("api/notes", (req, res) => {
-// //   res.sendFile(path.join(__dirname, '/db/db.json'))
-// // });
-// const data = fs.readFileSync("/db/db.json", "utf8");
-// res.json(JSON.parsel(data));
-// });
-// // POST Route 
-// app.post("api/notes", (req, res) => {
-//   const notes = {
-//   ...req.body,
-//     id: uuid(),
-//   };
-// console.log("post request for new notes");
-//   let data = fs.readFileSync("/db/db.json", "utf8");
-
-//   const dataJSON = JSON.parse(data);
-
-//   dataJSON.push(newNote);
-
-//   fs.writeFile("/db/db.json", JSON.stringify(dataJSON),
-//   (err, text) =>{
-//     if (err){
-//       console.error(err);
-//       return;
-//     }
-//     console.log("hi", text);
-//   }
-//   );
-
-//   console.log("New note added!");
-
-//   res.json(data);
-// });
-
-//   // const notes = JSON.parse(fs.readFileSync("./db/db.json"));
-//   // fs.readFileAsync("./develop/db/db.json", "utf8").then(function(data){
-//     // note.id = notes.length +1
-//     // newNotes.id = uuid.v4();
-//     // notes.push(newNotes);
-//     // return notes
-//     // }).then(function(notes){
-//       // fs.writeFileSync("./db/db.json", JSON.stringify(notes))
-//       // res.json(notes);
-//     // });
-//     // const { title, text } = req.body;
-    
-//     // if (req.body) {
-//       //   const newNote = {
-//         //     title,
-//         //     text,
-//         //   };
-        
-//         //   readAndAppend(newTip, './db/db.json');
-//         //   res.json(`Note added! 🚀`);
-//         // } else {
-//           //   res.error('Error in adding tip');
-//           // }
-//           // });
-          
           // GET Route for homepage
           app.get('/', function (req, res) {
           res.sendFile(path.join(__dirname, + '/public/index.html'));
