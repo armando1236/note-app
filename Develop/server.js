@@ -8,15 +8,26 @@ const { networkInterfaces } = require('os');
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+function noteCreateNewNote(body, noteTakerArray) {
+  const note = body;
+  noteTakerArray.push(note);
+  fs.writeFileSync(
+    path.join(__dirname, '../db/db.json'),
+    JSON.stringify({
+      notes: noteTakerArray
+    }, null, 2)
+  )
+  return note;
+}
 
 
 
 // Middleware for parsing JSON and urlencoded form data
-app.use(express.json());
+// app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // static middleware
-app.use(express.static('./public'));
+app.use(express.static('public'));
 app.use(express.json());
 
 app.get("api/notes", (req, res) => {
