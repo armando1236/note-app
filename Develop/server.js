@@ -30,39 +30,105 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(express.json());
 
-app.get("api/notes", (req, res) => {
-//   res.sendFile(path.join(__dirname, '/db/db.json'))
-// });
-let data = fs.readFileSync("/db/db.json", "utf8");
-res.json(JSON.parsel(data));
+app.get('/api/notes', (req, res) => {
+  res.json(notes.slice(1));
 });
-// POST Route 
-app.post("api/notes", (req, res) => {
-  const newNotes = req.body;
-  const notes = JSON.parse(fs.readFileSync("./db/db.json"));
-  // fs.readFileAsync("./develop/db/db.json", "utf8").then(function(data){
-    // note.id = notes.length +1
-    newNotes.id = uuid.v4();
-    notes.push(newNotes);
-    // return notes
-    // }).then(function(notes){
-      fs.writeFileSync("./db/db.json", JSON.stringify(notes))
-      res.json(notes);
-    });
-    // const { title, text } = req.body;
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/notes', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/notes.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+function createNewNote(body, notesArray) {
+  const newNote = body;
+  if (!Array.isArray(notesArray))
+      notesArray = [];
+  
+  if (notesArray.length === 0)
+      notesArray.push(0);
+
+  body.id = notesArray[0];
+  notesArray[0]++;
+
+  notesArray.push(newNote);
+  fs.writeFileSync(
+      path.join(__dirname, './db/db.json'),
+      JSON.stringify(notesArray, null, 2)
+  );
+  return newNote;
+}
+
+app.post('/api/notes', (req, res) => {
+  const newNote = createNewNote(req.body, allNotes);
+  res.json(newNote);
+});
+
+
+// app.get("api/notes", (req, res) => {
+// //   res.sendFile(path.join(__dirname, '/db/db.json'))
+// // });
+// const data = fs.readFileSync("/db/db.json", "utf8");
+// res.json(JSON.parsel(data));
+// });
+// // POST Route 
+// app.post("api/notes", (req, res) => {
+//   const notes = {
+//   ...req.body,
+//     id: uuid(),
+//   };
+// console.log("post request for new notes");
+//   let data = fs.readFileSync("/db/db.json", "utf8");
+
+//   const dataJSON = JSON.parse(data);
+
+//   dataJSON.push(newNote);
+
+//   fs.writeFile("/db/db.json", JSON.stringify(dataJSON),
+//   (err, text) =>{
+//     if (err){
+//       console.error(err);
+//       return;
+//     }
+//     console.log("hi", text);
+//   }
+//   );
+
+//   console.log("New note added!");
+
+//   res.json(data);
+// });
+
+//   // const notes = JSON.parse(fs.readFileSync("./db/db.json"));
+//   // fs.readFileAsync("./develop/db/db.json", "utf8").then(function(data){
+//     // note.id = notes.length +1
+//     // newNotes.id = uuid.v4();
+//     // notes.push(newNotes);
+//     // return notes
+//     // }).then(function(notes){
+//       // fs.writeFileSync("./db/db.json", JSON.stringify(notes))
+//       // res.json(notes);
+//     // });
+//     // const { title, text } = req.body;
     
-    // if (req.body) {
-      //   const newNote = {
-        //     title,
-        //     text,
-        //   };
+//     // if (req.body) {
+//       //   const newNote = {
+//         //     title,
+//         //     text,
+//         //   };
         
-        //   readAndAppend(newTip, './db/db.json');
-        //   res.json(`Note added! 🚀`);
-        // } else {
-          //   res.error('Error in adding tip');
-          // }
-          // });
+//         //   readAndAppend(newTip, './db/db.json');
+//         //   res.json(`Note added! 🚀`);
+//         // } else {
+//           //   res.error('Error in adding tip');
+//           // }
+//           // });
           
           // GET Route for homepage
           app.get('/', function (req, res) {
@@ -76,4 +142,4 @@ app.post("api/notes", (req, res) => {
       
           app.listen(PORT, () =>
           console.log(`App listening at http://localhost:${PORT} 🚀`)
-          );
+        );
