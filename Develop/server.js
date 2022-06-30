@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // static middleware
 app.use(express.static('./public'));
-
+app.use(express.json());
 
 app.get("api/notes", (req, res) => {
   res.sendFile(path.join(__dirname, '/db/db.json'))
